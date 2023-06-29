@@ -17,7 +17,7 @@ class _LoginViewState extends State<LoginView> {
   late final TextEditingController _password;
   @override
   void initState() {
-    // TODO: implement initState it's the  first statae build when fluter bild your wedjet to init your widjet
+    //implement initState it's the  first statae build when fluter bild your wedjet to init your widjet
     //inasilisation of the verible
     _email = TextEditingController();
     _password = TextEditingController();
@@ -26,7 +26,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    // implement dispose
     _email.dispose();
     _password.dispose();
     super.dispose();
