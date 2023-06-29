@@ -1,12 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Widget login(_email, _password) => Column(
+Widget login(userEmail, userPassword) => Column(
       children: [
         //text field enregister every time change the value in the controller TextEditingController
         //after init and dispo
         TextField(
-          controller: _email,
+          controller: userEmail,
           keyboardType: TextInputType
               .emailAddress, //tell the phone the field for emailadress to change the keybored to suite email
           autocorrect: false,
@@ -14,7 +14,7 @@ Widget login(_email, _password) => Column(
           decoration: const InputDecoration(hintText: 'Enter your email here'),
         ),
         TextField(
-            controller: _password,
+            controller: userPassword,
             obscureText: true,
             autocorrect: false,
             enableSuggestions: false,
@@ -22,8 +22,8 @@ Widget login(_email, _password) => Column(
                 const InputDecoration(hintText: 'Enter your password here')),
         TextButton(
             onPressed: () async {
-              final email = _email.text;
-              final password = _password.text;
+              final email = userEmail.text;
+              final password = userPassword.text;
 
               try {
                 final cordation = await FirebaseAuth.instance
