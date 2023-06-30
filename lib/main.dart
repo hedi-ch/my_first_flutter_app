@@ -1,9 +1,12 @@
 //import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/firebase_options.dart';
+import 'package:my_first_flutter_app/view/done_view.dart';
 import 'package:my_first_flutter_app/view/login_view.dart';
 import 'package:my_first_flutter_app/view/register_view.dart';
+import 'package:my_first_flutter_app/view/verify_email_view.dart';
 //import 'package:my_first_flutter_app/view/verify_email_view.dart';
 
 void main() {
@@ -48,18 +51,20 @@ class Homepage extends StatelessWidget {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  /*final user = FirebaseAuth.instance.currentUser;
-                  if ((user?.emailVerified ?? false)) {
-                    return const Text("Done🎇🎇🎆🎆🎇🎆");
+                  final user = FirebaseAuth.instance.currentUser;
+                  if (user != null) {
+                    if (user.emailVerified) {
+                      print("Email is Verified");
+                    } else {
+                      return const VerifyEmailView();
+                    }
+                  } else {
+                    return const LoginView();
                   }
-                  else{
-                    return const VerifyEmailView();
-                  }*/
-                  return const LoginView();
-
+                  return const DoneView();
                 default:
                   return const CircularProgressIndicator();
               }
-            })/*)*/;
+            }) /*)*/;
   }
 }
