@@ -1,7 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/Login.dart';
-import 'package:my_first_flutter_app/firebase_options.dart';
+
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -38,17 +38,20 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           title: const Text('Login'),
         ),
-        body: FutureBuilder(
+        body: login(_email, _password, context)
+    /*FutureBuilder(
             future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform,
             ),
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  return login(_email, _password);
+                  return 
+        login(_email, _password,
+            context); 
                 default:
                   return const Text("Loading...🔒");
               }
-            }));
+            })*/);
   }
 }

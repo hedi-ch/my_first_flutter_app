@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Widget registration(userEmail, userPassword) => Column(
+Widget registration(TextEditingController userEmail,
+        TextEditingController userPassword, BuildContext context) =>
+    Column(
       children: [
         //text field enregister every time change the value in the controller TextEditingController
         //after init and dispo
@@ -50,5 +52,12 @@ Widget registration(userEmail, userPassword) => Column(
               }
             },
             child: const Text("Register")),
+        TextButton(
+            onPressed: () {
+              //change the view
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil('/login/', (route) => false);
+            },
+            child: const Text("Already have acount ?Login here!✨✨"))
       ],
     );
