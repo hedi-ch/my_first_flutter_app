@@ -1,13 +1,11 @@
-//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/firebase_options.dart';
-import 'package:my_first_flutter_app/view/done_view.dart';
 import 'package:my_first_flutter_app/view/login_view.dart';
+import 'package:my_first_flutter_app/view/notes_view.dart';
 import 'package:my_first_flutter_app/view/register_view.dart';
 import 'package:my_first_flutter_app/view/verify_email_view.dart';
-//import 'package:my_first_flutter_app/view/verify_email_view.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,6 +27,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/login/': (context) => const LoginView(),
         '/register/': (context) => const RegisterView(),
+        '/Notes/': (context) => const NotesView(),
       },
     );
   }
@@ -54,14 +53,14 @@ class Homepage extends StatelessWidget {
                   final user = FirebaseAuth.instance.currentUser;
                   if (user != null) {
                     if (user.emailVerified) {
-                      print("Email is Verified");
+                      return const NotesView();
                     } else {
                       return const VerifyEmailView();
                     }
                   } else {
                     return const LoginView();
                   }
-                  return const DoneView();
+
                 default:
                   return const CircularProgressIndicator();
               }

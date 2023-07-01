@@ -32,6 +32,8 @@ Widget loginWidget(TextEditingController userEmail,
                     .signInWithEmailAndPassword(
                         email: email, password: password);
                 print(cordation);
+                Navigator.of(context)
+                    .pushNamedAndRemoveUntil('/Notes/', (_) => false);
               } on FirebaseAuthException catch (e) {
                 // TODO
                 switch (e.code) {
