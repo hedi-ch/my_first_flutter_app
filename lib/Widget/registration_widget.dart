@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtools show log;
 
 Widget registrationWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
@@ -30,24 +31,24 @@ Widget registrationWidget(TextEditingController userEmail,
                 final cordation = await FirebaseAuth.instance
                     .createUserWithEmailAndPassword(
                         email: email, password: password);
-                print(cordation);
+                devtools.log(cordation.toString());
               } //on Exception catch (e) {
               //this is how to know the type of the Exception
-              //print(e.runtimeType);
+              //devtools.log(e.runtimeType);
               //}
               on FirebaseAuthException catch (e) {
                 switch (e.code) {
                   case "weak-password":
-                    print("passord is weakl");
+                    devtools.log("passord is weakl");
                     break;
                   case "email-already-in-use":
-                    print("email is already in use");
+                    devtools.log("email is already in use");
                     break;
                   case "invalid-email":
-                    print("The email address is badly formatted");
+                    devtools.log("The email address is badly formatted");
                     break;
                   default:
-                    print(e.code);
+                    devtools.log(e.code);
                 }
               }
             },

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'dart:developer' as devtools show log;
 
 Widget loginWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
@@ -31,20 +32,19 @@ Widget loginWidget(TextEditingController userEmail,
                 final cordation = await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
-                print(cordation);
+                devtools.log(cordation.toString());
                 Navigator.of(context)
                     .pushNamedAndRemoveUntil('/Notes/', (_) => false);
               } on FirebaseAuthException catch (e) {
-                // TODO
                 switch (e.code) {
                   case "user-not-found":
-                    print("user-not-found");
+                    devtools.log("user-not-found");
                     break;
                   case "wrong-password":
-                    print("wrong-password");
+                    devtools.log("wrong-password");
                     break;
                   default:
-                    print("other eror => {${e.code}}");
+                    devtools.log("other eror => {${e.code}}");
                 }
               }
             },
