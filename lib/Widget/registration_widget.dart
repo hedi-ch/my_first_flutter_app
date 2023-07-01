@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Widget login(TextEditingController userEmail,
+Widget registrationWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
     Column(
       children: [
@@ -26,32 +26,38 @@ Widget login(TextEditingController userEmail,
             onPressed: () async {
               final email = userEmail.text;
               final password = userPassword.text;
-
               try {
                 final cordation = await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
+                    .createUserWithEmailAndPassword(
                         email: email, password: password);
                 print(cordation);
-              } on FirebaseAuthException catch (e) {
-                // TODO
+              } //on Exception catch (e) {
+              //this is how to know the type of the Exception
+              //print(e.runtimeType);
+              //}
+              on FirebaseAuthException catch (e) {
                 switch (e.code) {
-                  case "user-not-found":
-                    print("user-not-found");
+                  case "weak-password":
+                    print("passord is weakl");
                     break;
-                  case "wrong-password":
-                    print("wrong-password");
+                  case "email-already-in-use":
+                    print("email is already in use");
+                    break;
+                  case "invalid-email":
+                    print("The email address is badly formatted");
                     break;
                   default:
-                    print("other eror => {${e.code}}");
+                    print(e.code);
                 }
               }
             },
-            child: const Text("Login")),
+            child: const Text("Register")),
         TextButton(
             onPressed: () {
+              //change the view
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/register/', (route) => false);
+                  .pushNamedAndRemoveUntil('/login/', (route) => false);
             },
-            child: const Text("Don't have acount yet ? Register here!"))
+            child: const Text("Already have acount ?Login here!✨✨"))
       ],
     );

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_first_flutter_app/Widget/email_verification.dart';
+import 'package:my_first_flutter_app/Widget/email_verification_widget.dart';
 
 
 class VerifyEmailView extends StatefulWidget {
@@ -24,7 +24,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  return*/ emailVerification()/*;
+                  return*/ emailVerificationWidget()/*;
                 default:
                   return const Text("Loading...🔒");
               }

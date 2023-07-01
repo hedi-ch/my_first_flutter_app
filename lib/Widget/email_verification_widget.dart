@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-Widget emailVerification() =>Column(
+Widget emailVerificationWidget() =>Column(
       children: [
         const Text("Please verify your email"),
         TextButton(

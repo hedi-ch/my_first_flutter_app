@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:my_first_flutter_app/Widget/Login.dart';
+import 'package:my_first_flutter_app/Widget/Login_widget.dart';
 
 
 class LoginView extends StatefulWidget {
@@ -38,7 +38,7 @@ class _LoginViewState extends State<LoginView> {
         appBar: AppBar(
           title: const Text('Login'),
         ),
-        body: login(_email, _password, context)
+        body: loginWidget(_email, _password, context)
     /*FutureBuilder(
             future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform,
