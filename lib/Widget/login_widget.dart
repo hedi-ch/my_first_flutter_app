@@ -30,10 +30,9 @@ Widget loginWidget(TextEditingController userEmail,
 
               try {
                 final navigator = Navigator.of(context);
-                final cordation = await FirebaseAuth.instance
+                await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
-                devtools.log(cordation.toString());
                 navigator.pushNamedAndRemoveUntil('/Notes/', (_) => false);
               } on FirebaseAuthException catch (e) {
                 switch (e.code) {
