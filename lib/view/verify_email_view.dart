@@ -24,7 +24,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             builder: (context, snapshot) {
               switch (snapshot.connectionState) {
                 case ConnectionState.done:
-                  return*/ emailVerificationWidget()/*;
+                  return*/ emailVerificationWidget(context)/*;
                 default:
                   return const Text("Loading...🔒");
               }

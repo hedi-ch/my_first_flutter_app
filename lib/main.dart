@@ -38,12 +38,7 @@ class Homepage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return /*Scaffold(
-        appBar: AppBar(
-          title: const Text("Home Page"),
-        ),
-        body:*/
-        FutureBuilder(
+    return FutureBuilder(
             future: Firebase.initializeApp(
               options: DefaultFirebaseOptions.currentPlatform,
             ),
@@ -64,6 +59,6 @@ class Homepage extends StatelessWidget {
                 default:
                   return const CircularProgressIndicator();
               }
-            }) /*)*/;
+            }) ;
   }
 }

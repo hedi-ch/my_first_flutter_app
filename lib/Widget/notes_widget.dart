@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 Widget notesWidget() =>Column(
       children: [
-        const Text("Please verify your email"),
+        const Text("Main page"),
         TextButton(
           onPressed: ()  {
           },
