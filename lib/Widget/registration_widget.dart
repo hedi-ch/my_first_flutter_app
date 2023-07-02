@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:my_first_flutter_app/constants/routes.dart';
+
 Widget registrationWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
     Column(
@@ -57,7 +59,7 @@ Widget registrationWidget(TextEditingController userEmail,
             onPressed: () {
               //change the view
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/login/', (route) => false);
+                  .pushNamedAndRemoveUntil(loginRoute, (route) => false);
             },
             child: const Text("Already have acount ?Login here!✨✨"))
       ],

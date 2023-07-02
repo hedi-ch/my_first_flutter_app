@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_flutter_app/constants/routes.dart';
 
 Widget emailVerificationWidget(BuildContext context) => Column(
       children: [
@@ -10,7 +11,7 @@ Widget emailVerificationWidget(BuildContext context) => Column(
             final user = FirebaseAuth.instance.currentUser;
             await user?.sendEmailVerification();
             await FirebaseAuth.instance.signOut();
-            navigator.pushNamedAndRemoveUntil("/login/", (_) => false);
+            navigator.pushNamedAndRemoveUntil(loginRoute, (_) => false);
           },
           child: const Text("Send email verification"),
         )

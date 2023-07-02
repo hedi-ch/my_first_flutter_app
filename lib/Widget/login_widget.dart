@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:developer' as devtools show log;
 
+import 'package:my_first_flutter_app/constants/routes.dart';
+
 Widget loginWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
     Column(
@@ -33,7 +35,7 @@ Widget loginWidget(TextEditingController userEmail,
                 await FirebaseAuth.instance
                     .signInWithEmailAndPassword(
                         email: email, password: password);
-                navigator.pushNamedAndRemoveUntil('/Notes/', (_) => false);
+                navigator.pushNamedAndRemoveUntil(notesRoute, (_) => false);
               } on FirebaseAuthException catch (e) {
                 switch (e.code) {
                   case "user-not-found":
@@ -51,7 +53,7 @@ Widget loginWidget(TextEditingController userEmail,
         TextButton(
             onPressed: () {
               Navigator.of(context)
-                  .pushNamedAndRemoveUntil('/register/', (route) => false);
+                  .pushNamedAndRemoveUntil(registerRoute, (route) => false);
             },
             child: const Text("Don't have acount yet ? Register here!"))
       ],

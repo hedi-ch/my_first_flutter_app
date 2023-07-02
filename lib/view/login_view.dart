@@ -39,19 +39,6 @@ class _LoginViewState extends State<LoginView> {
           title: const Text('Login'),
         ),
         body: loginWidget(_email, _password, context)
-    /*FutureBuilder(
-            future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform,
-            ),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  return 
-        login(_email, _password,
-            context); 
-                default:
-                  return const Text("Loading...🔒");
-              }
-            })*/);
+    );
   }
 }
