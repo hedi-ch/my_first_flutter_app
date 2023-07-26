@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/notes_widget.dart';
+import 'package:my_first_flutter_app/constants/menu_action.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
 
-enum MenuAction { logout }
+
 
 Future<bool> showLogOutDialog(BuildContext context) {
   return showDialog<bool>(

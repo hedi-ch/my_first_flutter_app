@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:my_first_flutter_app/constants/routes.dart';
@@ -32,21 +33,27 @@ Widget loginWidget(TextEditingController userEmail,
 
               try {
                 final navigator = Navigator.of(context);
-                await FirebaseAuth.instance
-                    .signInWithEmailAndPassword(
-                        email: email, password: password);
-                navigator.pushNamedAndRemoveUntil(notesRoute, (_) => false);
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: email, password: password);
+                navigator.pushNamedAndRemoveUntil(mainRoute, (_) => false);
               } on FirebaseAuthException catch (e) {
                 switch (e.code) {
                   case "user-not-found":
-                    devtools.log("user-not-found");
+                    await showErrorDialog(context, "user not found");
                     break;
                   case "wrong-password":
-                    devtools.log("wrong-password");
+                    await showErrorDialog(
+                        context, "pls make shure if the password is correct");
+                    break;
+                  case "invalid-email":
+                    await showErrorDialog(
+                        context, "the forma of the email is rong");
                     break;
                   default:
-                    devtools.log("other eror => {${e.code}}");
+                    await showErrorDialog(context, "other eror => {${e.code}}");
                 }
+              } catch (e) {
+                await showErrorDialog(context, e.toString());
               }
             },
             child: const Text("Login")),
