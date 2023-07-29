@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_first_flutter_app/Widget/show_done_dialog_widget.dart';
+import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
 import 'dart:developer' as devtools show log;
 
 import 'package:my_first_flutter_app/constants/routes.dart';
@@ -30,10 +32,16 @@ Widget registrationWidget(TextEditingController userEmail,
               final email = userEmail.text;
               final password = userPassword.text;
               try {
-                final cordation = await FirebaseAuth.instance
-                    .createUserWithEmailAndPassword(
-                        email: email, password: password);
-                devtools.log(cordation.toString());
+                await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                    email: email, password: password);
+                final user = FirebaseAuth.instance.currentUser;
+                await user?.sendEmailVerification();
+                // ignore: use_build_context_synchronously
+                await showDoneDialog(
+                    context,
+                    "we send email verification all ready pls verify it ",
+                    loginRoute);
+                //devtools.log(cordation.toString());
               } //on Exception catch (e) {
               //this is how to know the type of the Exception
               //devtools.log(e.runtimeType);
@@ -41,16 +49,17 @@ Widget registrationWidget(TextEditingController userEmail,
               on FirebaseAuthException catch (e) {
                 switch (e.code) {
                   case "weak-password":
-                    devtools.log("passord is weakl");
+                    await showErrorDialog(context, "passord is weakl");
                     break;
                   case "email-already-in-use":
-                    devtools.log("email is already in use");
+                    await showErrorDialog(context, "email is already in use");
                     break;
                   case "invalid-email":
-                    devtools.log("The email address is badly formatted");
+                    await showErrorDialog(
+                        context, "The email address is badly formatted");
                     break;
                   default:
-                    devtools.log(e.code);
+                    await showErrorDialog(context, e.code);
                 }
               }
             },

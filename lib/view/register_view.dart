@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/registration_widget.dart';
 
-
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
 
@@ -35,18 +34,6 @@ class _RegisterViewState extends State<RegisterView> {
         appBar: AppBar(
           title: const Text('Register'),
         ),
-        body: registrationWidget(_email, _password, context )
-        /*FutureBuilder(
-            future: Firebase.initializeApp(
-              options: DefaultFirebaseOptions.currentPlatform,
-            ),
-            builder: (context, snapshot) {
-              switch (snapshot.connectionState) {
-                case ConnectionState.done:
-                  return registration(_email, _password, context );
-                default:
-                  return const Text("Loading...🔒");
-              }
-            })*/);
+        body: registrationWidget(_email, _password, context));
   }
 }

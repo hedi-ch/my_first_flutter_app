@@ -7,7 +7,6 @@ import 'package:my_first_flutter_app/view/login_view.dart';
 import 'package:my_first_flutter_app/view/notes_view.dart';
 import 'package:my_first_flutter_app/view/register_view.dart';
 import 'package:my_first_flutter_app/view/verify_email_view.dart';
-import 'dart:developer' as devtools show log;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,9 +49,10 @@ class Homepage extends StatelessWidget {
             case ConnectionState.done:
               final user = FirebaseAuth.instance.currentUser;
               if (user != null) {
-                devtools.log(user.toString());
-                devtools.log(
-                    'the user is verified ? :=> ${user.emailVerified.toString()}');
+                //devtools.log(user.toString());
+                //devtools.log(
+                //    'the user is verified ? :=> ${user.emailVerified.toString()}');
+                //devtools.log("in the main .dart the log");
                 if (user.emailVerified) {
                   return const NotesView();
                 } else {
