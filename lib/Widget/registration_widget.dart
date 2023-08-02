@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/show_done_dialog_widget.dart';
 import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
-import 'dart:developer' as devtools show log;
-
 import 'package:my_first_flutter_app/constants/routes.dart';
 
 Widget registrationWidget(TextEditingController userEmail,
