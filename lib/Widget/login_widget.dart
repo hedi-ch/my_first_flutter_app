@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
-
 import 'package:my_first_flutter_app/constants/routes.dart';
+import 'package:my_first_flutter_app/services/auth/auth_exeptions.dart';
+import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 
 Widget loginWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
@@ -32,27 +32,19 @@ Widget loginWidget(TextEditingController userEmail,
 
               try {
                 final navigator = Navigator.of(context);
-                await FirebaseAuth.instance.signInWithEmailAndPassword(
-                    email: email, password: password);
+                await AuthService.firebase()
+                    .logIn(email: email, password: password);
                 navigator.pushNamedAndRemoveUntil(mainRoute, (_) => false);
-              } on FirebaseAuthException catch (e) {
-                switch (e.code) {
-                  case "user-not-found":
-                    await showErrorDialog(context, "user not found");
-                    break;
-                  case "wrong-password":
-                    await showErrorDialog(
-                        context, "pls make shure if the password is correct");
-                    break;
-                  case "invalid-email":
-                    await showErrorDialog(
-                        context, "the forma of the email is rong");
-                    break;
-                  default:
-                    await showErrorDialog(context, "other eror => {${e.code}}");
-                }
-              } catch (e) {
-                await showErrorDialog(context, e.toString());
+              } on UserNotFoundAuthException {
+                await showErrorDialog(context, "user not found");
+              } on WrongPasswordAuthException {
+                await showErrorDialog(
+                    context, "pls make shure if the password is correct");
+              } on InvalidEmailAuthException {
+                await showErrorDialog(
+                    context, "the forma of the email is rong");
+              } on GenericAuthException {
+                await showErrorDialog(context, "Authentification error");
               }
             },
             child: const Text("Login")),

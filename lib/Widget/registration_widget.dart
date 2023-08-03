@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/show_done_dialog_widget.dart';
 import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
+import 'package:my_first_flutter_app/services/auth/auth_exeptions.dart';
+import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 
 Widget registrationWidget(TextEditingController userEmail,
         TextEditingController userPassword, BuildContext context) =>
@@ -30,10 +31,9 @@ Widget registrationWidget(TextEditingController userEmail,
               final email = userEmail.text;
               final password = userPassword.text;
               try {
-                await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                    email: email, password: password);
-                final user = FirebaseAuth.instance.currentUser;
-                await user?.sendEmailVerification();
+                await AuthService.firebase()
+                    .createUser(email: email, password: password);
+                await AuthService.firebase().sendEmailVerification();
                 // ignore: use_build_context_synchronously
                 await showDoneDialog(
                     context,
@@ -44,21 +44,15 @@ Widget registrationWidget(TextEditingController userEmail,
               //this is how to know the type of the Exception
               //devtools.log(e.runtimeType);
               //}
-              on FirebaseAuthException catch (e) {
-                switch (e.code) {
-                  case "weak-password":
-                    await showErrorDialog(context, "passord is weakl");
-                    break;
-                  case "email-already-in-use":
-                    await showErrorDialog(context, "email is already in use");
-                    break;
-                  case "invalid-email":
-                    await showErrorDialog(
-                        context, "The email address is badly formatted");
-                    break;
-                  default:
-                    await showErrorDialog(context, e.code);
-                }
+              on WeakPasswordAuthException {
+                await showErrorDialog(context, "passord is weakl");
+              } on EmailAlreadyInUseAuthException {
+                await showErrorDialog(context, "email is already in use");
+              } on InvalidEmailAuthException {
+                await showErrorDialog(
+                    context, "The email address is badly formatted");
+              } on GenericAuthException {
+                await showErrorDialog(context, "register failed");
               }
             },
             child: const Text("Register")),

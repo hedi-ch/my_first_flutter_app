@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/email_verification_widget.dart';
 import 'package:my_first_flutter_app/constants/menu_action.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
+import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 import 'package:my_first_flutter_app/view/notes_view.dart';
 
 class VerifyEmailView extends StatefulWidget {
@@ -30,7 +30,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                     final shouldLogout = await showLogOutDialog(
                         context); //this line will show mode to choose if you wont to log out
                     if (shouldLogout) {
-                      await FirebaseAuth.instance.signOut();
+                      await AuthService.firebase().logOut();
                       if (!mounted) return;
                       Navigator.of(context)
                           .pushNamedAndRemoveUntil(loginRoute, (_) => false);
