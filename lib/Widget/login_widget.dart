@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_first_flutter_app/Widget/show_error_dialog_widget.dart';
+import 'package:my_first_flutter_app/constants/exceptions.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
-import 'package:my_first_flutter_app/services/auth/auth_exeptions.dart';
 import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 
 Widget loginWidget(TextEditingController userEmail,
