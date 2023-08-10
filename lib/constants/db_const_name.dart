@@ -1,4 +1,4 @@
-const dbName = 'notes db';
+const dbName = 'notesDB';
 const idColumn = 'id';
 const emailColumn = 'email';
 const userIdColumn = 'user_id';

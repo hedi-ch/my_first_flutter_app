@@ -1,3 +1,4 @@
+import 'dart:async' show StreamController;
 import 'package:my_first_flutter_app/constants/db_const_name.dart';
 import 'package:my_first_flutter_app/constants/exceptions.dart';
 import 'package:path/path.dart';
@@ -6,6 +7,30 @@ import 'package:sqflite/sqflite.dart';
 
 class NoteService {
   Database? _db;
+//stream of note cashe
+  List<DatabaseNote> _notes = [];
+// stream controller
+  final _noteStreamController =
+      StreamController<List<DatabaseNote>>.broadcast();
+// cash note
+  Future<void> _cashNotes() async {
+    final allNotes = await getNote();
+    _notes = allNotes.toList();
+    _noteStreamController.add(_notes);
+  }
+
+  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+    try {
+      final user = await getUser(email: email);
+      return user;
+    } on CouldNotFoundUserException {
+      final user = await addUser(email: email);
+      return user;
+    } catch (_) {
+      rethrow;
+    }
+  }
+
 //if this function don't work look at 1:37:22 => https://www.youtube.com/watch?v=IXNjoByIX5Y&list=PL6yRaaP0WPkVtoeNIGqILtRAgd3h2CNpT&index=28
 // and rewrite the code of get note and get all note;
   Future<DatabaseNote> updateNote({
@@ -19,20 +44,36 @@ class NoteService {
     if (updateList.isEmpty) {
       throw CouldNotUpdateNoteException();
     } else {
-      return DatabaseNote.fromRow(updateList[0]);
+      final note = DatabaseNote.fromRow(updateList[0]);
+      _notes.removeWhere((elementNote) => elementNote.id == id);
+      _notes.add(note);
+      _noteStreamController.add(_notes);
+      return note;
     }
   }
 
   Future<Iterable<DatabaseNote>> getNote([int? id]) async {
+    //if you pass id you will get the note with that id
+    // if you pass is without id will return all the notes
     final db = _getDatabaseOrThrowException();
     if (id == null) {
       final notes = await db.rawQuery("select * from $noteTable");
-      return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+      final noteIterable =
+          notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+      _notes = noteIterable.toList();
+      _noteStreamController.add(_notes);
+      return noteIterable;
     } else {
       final notes =
           await db.rawQuery("select * from $noteTable where $idColumn = $id");
       if (notes.isNotEmpty) {
-        return notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+        final noteIterable =
+            notes.map((noteRow) => DatabaseNote.fromRow(noteRow));
+        final note = noteIterable.first;
+        _notes.removeWhere((noteElement) => noteElement.id == id);
+        _notes.add(note);
+        _noteStreamController.add(_notes);
+        return noteIterable;
       } else {
         throw CouldNotFoundNoteException();
       }
@@ -42,7 +83,12 @@ class NoteService {
   Future<int> clearNote({required int id}) async {
     final db = _getDatabaseOrThrowException();
     final deleleteCount = await db.delete(noteTable);
-    return deleleteCount;
+    final numberOfDelet = deleleteCount;
+    if (numberOfDelet != 0) {
+      _notes.clear();
+      _noteStreamController.add(_notes);
+    }
+    return numberOfDelet;
   }
 
   Future<void> deleteNote({required int id}) async {
@@ -54,6 +100,9 @@ class NoteService {
     );
     if (deleleteCount != 1) {
       throw CouldNotDeleteNoteException();
+    } else {
+      _notes.removeWhere((note) => note.id == id);
+      _noteStreamController.add(_notes);
     }
   }
 
@@ -64,8 +113,11 @@ class NoteService {
     if (user == owner) {
       final noteId = await db
           .insert(noteTable, {userIdColumn: owner.id, textColumn: text});
-      return DatabaseNote.fromRow(
+      final note = DatabaseNote.fromRow(
           {idColumn: noteId, userIdColumn: owner.id, text: text});
+      _notes.add(note);
+      _noteStreamController.add(_notes);
+      return note;
     } else {
       throw CouldNotFoundUserException();
     }
@@ -138,12 +190,14 @@ class NoteService {
     try {
       final docsPath = await getApplicationDocumentsDirectory();
       final dbPath = join(docsPath.path, dbName);
-      print(dbPath);
       final db = await openDatabase(dbPath);
       _db = db;
       //create note and user table
       await db.execute(createUserTableRequest);
       await db.execute(createNoteTableRequest);
+
+      //cash the note when you the db
+      await _cashNotes();
     } on MissingPlatformDirectoryException {
       throw UnableToGetDocumentsDirectoryException();
     }
