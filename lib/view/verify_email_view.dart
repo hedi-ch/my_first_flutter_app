@@ -3,7 +3,7 @@ import 'package:my_first_flutter_app/Widget/email_verification_widget.dart';
 import 'package:my_first_flutter_app/constants/menu_action.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
 import 'package:my_first_flutter_app/services/auth/auth_service.dart';
-import 'package:my_first_flutter_app/view/notes_view.dart';
+import 'package:my_first_flutter_app/view/note/notes_view.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});

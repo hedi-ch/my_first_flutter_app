@@ -104,7 +104,8 @@ class _NotesViewState extends State<NotesView> {
                         return const Text(
                             "Future builder of note stream is active");
                       case ConnectionState.waiting:
-                        return const CircularProgressIndicator();
+                        return const Text(
+                            "Future builder of note stream is waiting");
                     }
                   },
                 );
@@ -113,9 +114,17 @@ class _NotesViewState extends State<NotesView> {
               case ConnectionState.active:
                 return const Text("Future builder of note is active");
               case ConnectionState.waiting:
-                return const CircularProgressIndicator();
+                return const Text("Future builder of note is waiting");
             }
           },
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context)
+                          .pushNamed(newNoteRoute);
+          },
+          tooltip: 'add new note',
+          child: const Icon(Icons.add),
         ));
   }
 }
