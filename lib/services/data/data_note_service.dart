@@ -13,7 +13,7 @@ class NoteService {
   final _noteStreamController =
       StreamController<List<DatabaseNote>>.broadcast();
 
-      //make note service singleton
+  //make note service singleton
   static final NoteService _shared = NoteService._sharedInstance();
   NoteService._sharedInstance();
   factory NoteService() => _shared;
@@ -48,7 +48,7 @@ class NoteService {
     final db = _getDatabaseOrThrowException();
     await getNote(id);
     final updateList = await db.rawQuery(
-        "update $noteTable set $textColumn = $text where $idColumn =$id");
+        "update $noteTable set $textColumn = ' $text g' where $idColumn =$id");
     if (updateList.isEmpty) {
       throw CouldNotUpdateNoteException();
     } else {
@@ -126,7 +126,7 @@ class NoteService {
       final noteId = await db
           .insert(noteTable, {userIdColumn: owner.id, textColumn: text});
       final note = DatabaseNote.fromRow(
-          {idColumn: noteId, userIdColumn: owner.id, text: text});
+          {idColumn: noteId, userIdColumn: owner.id, textColumn: text});
       _notes.add(note);
       _noteStreamController.add(_notes);
       return note;
@@ -155,7 +155,7 @@ class NoteService {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrowException();
     final users = await db.query(userTable,
-        columns: [idColumn],
+        columns: [idColumn, emailColumn],
         where: '$emailColumn = ?',
         whereArgs: [email.toLowerCase()]);
     if (users.isNotEmpty) {

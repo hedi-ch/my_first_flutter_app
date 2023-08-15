@@ -15,7 +15,7 @@ const createNoteTableRequest = '''
 CREATE TABLE IF NOT EXISTS note(
   id integer not null,
   user_id integer not null,
-  text text not null,
+  text text,
   primary key (id autoincrement),
   foreign key(user_id) references user(id)
   );
