@@ -47,12 +47,6 @@ class _NotesViewState extends State<NotesView> {
   }
 
   @override
-  void dispose() {
-    _noteService.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
@@ -101,8 +95,26 @@ class _NotesViewState extends State<NotesView> {
                         return const Text(
                             "Future builder of note stream is none");
                       case ConnectionState.active:
-                        return const Text(
-                            "Future builder of note stream is active");
+                        if (snapshot.hasData) {
+                          final allNotes = snapshot.data as List<DatabaseNote>;
+                          return ListView.builder(
+                            itemCount: allNotes.length,
+                            itemBuilder: (context, index) {
+                              return ListTile(
+                                title: Text(
+                                  allNotes[index].text,
+                                  maxLines: 1,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              );
+                            },
+                          );
+                          //ListView.builder(itemCount:,itemBuilder: ,);
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+
                       case ConnectionState.waiting:
                         return const Text(
                             "Future builder of note stream is waiting");
@@ -120,8 +132,7 @@ class _NotesViewState extends State<NotesView> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.of(context)
-                          .pushNamed(newNoteRoute);
+            Navigator.of(context).pushNamed(newNoteRoute);
           },
           tooltip: 'add new note',
           child: const Icon(Icons.add),
