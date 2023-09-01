@@ -1,30 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:my_first_flutter_app/utilities/dialogs/show_choisse_dialog.dart';
 import 'package:my_first_flutter_app/constants/menu_action.dart';
 import 'package:my_first_flutter_app/constants/routes.dart';
 import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 import 'package:my_first_flutter_app/services/data/data_note_service.dart';
-
-Future<bool> showLogOutDialog(BuildContext context) {
-  return showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text("Sign out"),
-      content: const Text("Are you sure you want to sign out?"),
-      actions: [
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text("Cancel")),
-        TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: const Text("Log out"))
-      ],
-    ),
-  ).then((value) => value ?? false);
-}
 
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
@@ -52,11 +31,25 @@ class _NotesViewState extends State<NotesView> {
         appBar: AppBar(
           title: const Text("Main UI"),
           actions: [
+            IconButton(
+                onPressed: () async {
+                  final bool shouldDeleteNote = await showChoisseDialog(context,
+                      title: "Delete All Note",
+                      content: "Are you sure you want to delete all note?");
+                  if (shouldDeleteNote) {
+                    await _noteService.clearNote();
+                  }
+                },
+                icon: const Icon(Icons.cleaning_services)),
             PopupMenuButton<MenuAction>(
               onSelected: (value) async {
                 switch (value) {
                   case MenuAction.logout:
-                    final shouldLogout = await showLogOutDialog(context);
+                    final shouldLogout = await showChoisseDialog(
+                      context,
+                      title: 'Sign out',
+                      content: 'Are you sure you want to sign out?',
+                    );
                     if (shouldLogout) {
                       await AuthService.firebase().logOut();
                       if (!mounted) return;
@@ -101,13 +94,27 @@ class _NotesViewState extends State<NotesView> {
                             itemCount: allNotes.length,
                             itemBuilder: (context, index) {
                               return ListTile(
-                                title: Text(
-                                  allNotes[index].text,
-                                  maxLines: 1,
-                                  softWrap: true,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              );
+                                  title: Text(
+                                    allNotes[index].text,
+                                    maxLines: 1,
+                                    softWrap: true,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  trailing: IconButton(
+                                      icon: const Icon(
+                                        Icons.delete,
+                                      ),
+                                      onPressed: () async {
+                                        final bool shouldDeleteNote =
+                                            await showChoisseDialog(context,
+                                                title: "Delete Note",
+                                                content:
+                                                    "Are you sure you want to delete note?");
+                                        if (shouldDeleteNote) {
+                                          await _noteService.deleteNote(
+                                              id: allNotes[index].id);
+                                        }
+                                      }));
                             },
                           );
                           //ListView.builder(itemCount:,itemBuilder: ,);
