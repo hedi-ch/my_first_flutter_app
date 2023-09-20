@@ -190,12 +190,12 @@ class NoteService {
   Future<void> deleteUser({required String email}) async {
     await _ensureDbIsOpen();
     final db = _getDatabaseOrThrowException();
-    final deleleteCount = await db.delete(
+    final deleteCount = await db.delete(
       userTable,
       where: 'email = ?',
       whereArgs: [email.toLowerCase()],
     );
-    if (deleleteCount != 1) {
+    if (deleteCount != 1) {
       throw CouldNotDeleteUserException();
     }
   }

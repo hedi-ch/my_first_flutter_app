@@ -5,6 +5,8 @@ import 'package:my_first_flutter_app/constants/routes.dart';
 import 'package:my_first_flutter_app/services/auth/auth_service.dart';
 import 'package:my_first_flutter_app/services/data/data_note_service.dart';
 
+typedef OnTap = void Function(DatabaseNote note);
+
 class NotesView extends StatefulWidget {
   const NotesView({super.key});
   @override
@@ -90,34 +92,77 @@ class _NotesViewState extends State<NotesView> {
                       case ConnectionState.active:
                         if (snapshot.hasData) {
                           final allNotes = snapshot.data as List<DatabaseNote>;
-                          return ListView.builder(
-                            itemCount: allNotes.length,
-                            itemBuilder: (context, index) {
-                              return ListTile(
-                                  title: Text(
-                                    allNotes[index].text,
-                                    maxLines: 1,
-                                    softWrap: true,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                  trailing: IconButton(
-                                      icon: const Icon(
-                                        Icons.delete,
-                                      ),
-                                      onPressed: () async {
-                                        final bool shouldDeleteNote =
-                                            await showChoisseDialog(context,
-                                                title: "Delete Note",
-                                                content:
-                                                    "Are you sure you want to delete note?");
-                                        if (shouldDeleteNote) {
-                                          await _noteService.deleteNote(
-                                              id: allNotes[index].id);
-                                        }
-                                      }));
-                            },
-                          );
-                          //ListView.builder(itemCount:,itemBuilder: ,);
+                          return GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                              ),
+                              itemCount: allNotes.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return InkWell(onTap: (){
+                                  Navigator.of(context).pushNamed(
+                                    newNoteRoute,
+                                    arguments: allNotes[index]);},
+                                  child: Container(
+                                      margin: const EdgeInsets.all(10.0),
+                                      decoration: const BoxDecoration(
+                                          border: Border(
+                                        top: BorderSide(color: Color(0xFFDFDFDF)),
+                                        left:
+                                            BorderSide(color: Color(0xFFDFDFDF)),
+                                        right:
+                                            BorderSide(color: Color(0xFF7F7F7F)),
+                                        bottom:
+                                            BorderSide(color: Color(0xFF7F7F7F)),
+                                      )),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ListTile(
+                                            title: Text(
+                                              allNotes[index].text,
+                                              maxLines: 1,
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            trailing: IconButton(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                ),
+                                                onPressed: () async {
+                                                  final bool shouldDeleteNote =
+                                                      await showChoisseDialog(
+                                                          context,
+                                                          title: "Delete Note",
+                                                          content:
+                                                              "Are you sure you want to delete note?");
+                                                  if (shouldDeleteNote) {
+                                                    await _noteService.deleteNote(
+                                                        id: allNotes[index].id);
+                                                  }
+                                                }),
+                                          ),
+                                          Container(
+                                            width:
+                                                MediaQuery.of(context).size.width,
+                                            decoration: const BoxDecoration(
+                                                border: Border(
+                                                    top: BorderSide(
+                                                        color: Color.fromARGB(
+                                                            255, 14, 31, 85),
+                                                        width: 1))),
+                                            child: Text(
+                                              textAlign: TextAlign.start,
+                                              allNotes[index].text.substring(allNotes[index].text.indexOf("\n")+1),
+                                              maxLines: 5,
+                                              softWrap: true,
+                                            ),
+                                          )
+                                        ],
+                                      )),
+                                );
+                              });
                         } else {
                           return const CircularProgressIndicator();
                         }
